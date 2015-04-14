@@ -56,6 +56,10 @@ class MasterViewController: UITableViewController {
 
     func insertNewObject(sender: Contact) {
         
+        // ***** RYAN: I made this go to the edit screen, we need to make another screen
+        //             for add and put it here
+        let ctrl = EditViewController(nibName:  "EditViewController", bundle: nil)
+        self.navigationController?.pushViewController(ctrl, animated: true)
 // SAVE DATA TO NSJSONSerialization (Native JSON framework)
 
 //        objects.insertObject(NSDate(), atIndex: 0)
@@ -111,10 +115,10 @@ class MasterViewController: UITableViewController {
         }
     }
 
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    /*override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let ctrl = EditViewController(nibName:  "EditViewController", bundle: nil)
         self.navigationController?.pushViewController(ctrl, animated: true)
-    }
+    }*/
 
 }
 
