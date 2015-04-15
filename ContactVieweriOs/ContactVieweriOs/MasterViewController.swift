@@ -36,8 +36,8 @@ class MasterViewController: UITableViewController {
         // Do any additional setup after loading the view, typically from a nib.
         self.navigationItem.leftBarButtonItem = self.editButtonItem()
 
-        let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "insertNewObject:")
-        self.navigationItem.rightBarButtonItem = addButton
+        //let addButton = UIBarButtonItem(barButtonSystemItem: .Add, target: self, action: "insertNewObject:")
+        //self.navigationItem.rightBarButtonItem = addButton
         if let split = self.splitViewController {
             let controllers = split.viewControllers
             self.detailViewController = controllers[controllers.count-1].topViewController as? DetailViewController
@@ -54,18 +54,20 @@ class MasterViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    func insertNewObject(sender: Contact) {
+    /*func insertNewObject(sender: Contact) {
+        let mSegue = "showEdit" as UIStoryboardSegue
+        prepareForSegue(mSegue)
         
         // ***** RYAN: I made this go to the edit screen, we need to make another screen
         //             for add and put it here
-        let ctrl = EditViewController(nibName:  "EditViewController", bundle: nil)
-        self.navigationController?.pushViewController(ctrl, animated: true)
+        //let ctrl = EditViewController(nibName:  "EditViewController", bundle: nil)
+        //self.navigationController?.pushViewController(ctrl, animated: true)
 // SAVE DATA TO NSJSONSerialization (Native JSON framework)
 
 //        objects.insertObject(NSDate(), atIndex: 0)
 //        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
 //        self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-    }
+    }*/
 
     // MARK: - Segues
 
@@ -75,6 +77,15 @@ class MasterViewController: UITableViewController {
                 let object = contacts[indexPath.row] as Contact
                 let controller = (segue.destinationViewController as UINavigationController).topViewController as DetailViewController
                 controller.detailItem = object
+                controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
+                controller.navigationItem.leftItemsSupplementBackButton = true
+            }
+        }
+        if segue.identifier == "showEdit" {
+            if let indexPath = self.tableView.indexPathForSelectedRow() {
+                let object = Contact(name: "", phone: "", title: "", email: "", twitterId: "") as Contact
+                let controller = (segue.destinationViewController as UINavigationController).topViewController as EditViewController
+                controller.editItem = object
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }

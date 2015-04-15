@@ -41,8 +41,8 @@ class DetailViewController: UIViewController {
     }
 
     @IBAction func EditButtonPressed(sender: UIButton) {
-        let ctrl = EditViewController(nibName:  "EditViewController", bundle: nil)
-        self.navigationController?.pushViewController(ctrl, animated: true)
+        //let ctrl = EditViewController(nibName:  "EditViewController", bundle: nil)
+        //self.navigationController?.pushViewController(ctrl, animated: true)
     }
     
     @IBAction func DeleteButtonPressed(sender: UIButton) {

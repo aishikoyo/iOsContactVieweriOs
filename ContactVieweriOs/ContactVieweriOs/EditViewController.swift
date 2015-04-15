@@ -10,6 +10,23 @@ import UIKit
 
 class EditViewController: UIViewController {
 
+    @IBOutlet weak var editDescriptionLabel: UILabel!
+    
+    var editItem: Contact? {
+        didSet {
+            // Update the view.
+            self.configureView()
+        }
+    }
+    
+    func configureView() {
+        // Update the user interface for the detail item.
+        if let mContact: Contact = self.editItem {
+            if let label = self.editDescriptionLabel {
+                label.text = mContact.name
+            }
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,12 +37,6 @@ class EditViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
-    }
-    
-    @IBAction func SaveButtonPressed(sender: UIButton) {
-    }
-    
-    @IBAction func CancelButtonPressed(sender: UIButton) {
     }
     
 
