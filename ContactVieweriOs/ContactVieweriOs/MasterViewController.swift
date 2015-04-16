@@ -43,10 +43,7 @@ class MasterViewController: UITableViewController {
             self.detailViewController = controllers[controllers.count-1].topViewController as? DetailViewController
         }
         
-        // Use this to access the local persistent storage
-        //let documentsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .
-        //    UserDomainMask, true)[0] as NSString
-        //let path = NSBundle.mainBundle().pathForResource("filename", ofType: "fileExt")
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -86,6 +83,7 @@ class MasterViewController: UITableViewController {
                 let object = Contact(name: "", phone: "", title: "", email: "", twitterId: "") as Contact
                 let controller = (segue.destinationViewController as UINavigationController).topViewController as EditViewController
                 controller.editItem = object
+                controller.newContact = true
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
@@ -125,11 +123,5 @@ class MasterViewController: UITableViewController {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
         }
     }
-
-    /*override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let ctrl = EditViewController(nibName:  "EditViewController", bundle: nil)
-        self.navigationController?.pushViewController(ctrl, animated: true)
-    }*/
-
 }
 
