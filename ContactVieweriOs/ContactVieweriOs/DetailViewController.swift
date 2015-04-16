@@ -17,6 +17,8 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var twitterLabel: UILabel!
     @IBOutlet weak var newlabel: UILabel!
 
+    var index: Int = -1
+    
     var detailItem: Contact? {
         didSet {
             // Update the view.
@@ -24,8 +26,16 @@ class DetailViewController: UIViewController {
         }
     }
 
+    var contactIndex: Int? {
+        didSet {
+            //self.index = self.contactIndex!
+        }
+    }
+    
     func configureView() {
-        //self.viewDidLoad()
+        if let mIndex: Int = self.contactIndex{
+            self.index = mIndex
+        }
         // Update the user interface for the detail item.
         //self.nameLabel.text = self.detailItem?.name
         if let mContact: Contact = self.detailItem {
@@ -63,7 +73,7 @@ class DetailViewController: UIViewController {
         if let mContact: Contact = self.detailItem{
             controller.editItem = mContact
         }
-        controller.newContact = false
+        controller.contactIndex = self.index
         controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
         controller.navigationItem.leftItemsSupplementBackButton = true
     }

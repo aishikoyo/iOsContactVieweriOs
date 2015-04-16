@@ -16,37 +16,34 @@ class EditViewController: UIViewController {
     @IBOutlet weak var emailBox: UITextField!
     @IBOutlet weak var twitterBox: UITextField!
     
-    
+    var index: Int = -1
+
     var editItem: Contact? {
         didSet {
-            // Update the view.
-            //self.configureView()
         }
     }
     
-    var newContact: Bool? {
+    var contactIndex: Int? {
         didSet {
-            // Set as a new contact.
-            self.setAsNew()
-        }
-    }
-    
-    func setAsNew()
-    {
-        if (newContact == true){
+            //self.index = self.contactIndex!
         }
     }
     
     func configureView()
     {
-        if let newItem: Bool = self.newContact
-        {
-            if(newItem)
+        if let mIndex: Int = self.contactIndex{
+            self.index = mIndex
+            if(mIndex < 0)
             {
-                self.nameBox.text = "Add New Values"
+                self.nameBox.text = ""
+                self.titleBox.text = ""
+                self.phoneBox.text = ""
+                self.emailBox.text = ""
+                self.twitterBox.text = ""
             }
             else
             {
+                NSLog("Existing Contact %d", self.index)
                 // Update the user interface for the detail item.
                 if let mContact: Contact = self.editItem
                 {
@@ -85,13 +82,22 @@ class EditViewController: UIViewController {
     @IBAction func saveContact(sender: AnyObject)
     {
         // TODO save the new or updated contact
-        if (newContact == true)
+        if (self.index < 0)
         {
             //Create a new contact
+            let mContact = Contact(name: self.nameBox.text,
+                phone: self.phoneBox.text, title: self.titleBox.text,
+                email: self.emailBox.text, twitterId: self.twitterBox.text)
+            
+            ContactsRepository.sharedInstance.AddNewContact(mContact)
         }
         else
         {
             //Update the existing contact
+            let mContact = Contact(name: self.nameBox.text,
+                phone: self.phoneBox.text, title: self.titleBox.text,
+                email: self.emailBox.text, twitterId: self.twitterBox.text)
+            ContactsRepository.sharedInstance.UpdateExistingContact(mContact, mId: self.index)
         }
     }
 

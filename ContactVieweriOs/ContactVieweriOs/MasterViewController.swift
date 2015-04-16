@@ -11,8 +11,7 @@ import UIKit
 class MasterViewController: UITableViewController {
 
     var detailViewController: DetailViewController? = nil
-    var contacts = [Contact]()
-
+    var contacts = ContactsRepository.sharedInstance.GetContacts()
 
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -20,14 +19,6 @@ class MasterViewController: UITableViewController {
             self.clearsSelectionOnViewWillAppear = false
             self.preferredContentSize = CGSize(width: 320.0, height: 600.0)
         }
-        
-        let contact1 = Contact(name: "a", phone: "123", title: "dude", email: "a@a.com", twitterId: "aman")
-        let contact2 = Contact(name: "b", phone: "456", title: "dudette", email: "b@b.com", twitterId: "bgirl")
-        let contact3 = Contact(name: "c", phone: "789", title: "dudelet", email: "c@c.com", twitterId: "ckid")
-        
-        contacts.append(contact1)
-        contacts.append(contact2)
-        contacts.append(contact3)
         
     }
 
@@ -42,29 +33,16 @@ class MasterViewController: UITableViewController {
             let controllers = split.viewControllers
             self.detailViewController = controllers[controllers.count-1].topViewController as? DetailViewController
         }
-        
-        
     }
 
+    override func viewDidAppear(animated: Bool) {
+        self.tableView.reloadData()
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-    /*func insertNewObject(sender: Contact) {
-        let mSegue = "showEdit" as UIStoryboardSegue
-        prepareForSegue(mSegue)
-        
-        // ***** RYAN: I made this go to the edit screen, we need to make another screen
-        //             for add and put it here
-        //let ctrl = EditViewController(nibName:  "EditViewController", bundle: nil)
-        //self.navigationController?.pushViewController(ctrl, animated: true)
-// SAVE DATA TO NSJSONSerialization (Native JSON framework)
-
-//        objects.insertObject(NSDate(), atIndex: 0)
-//        let indexPath = NSIndexPath(forRow: 0, inSection: 0)
-//        self.tableView.insertRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-    }*/
 
     // MARK: - Segues
 
@@ -74,6 +52,7 @@ class MasterViewController: UITableViewController {
                 let object = contacts[indexPath.row] as Contact
                 let controller = (segue.destinationViewController as UINavigationController).topViewController as DetailViewController
                 controller.detailItem = object
+                controller.contactIndex = indexPath.row
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
@@ -83,7 +62,7 @@ class MasterViewController: UITableViewController {
                 let object = Contact(name: "", phone: "", title: "", email: "", twitterId: "") as Contact
                 let controller = (segue.destinationViewController as UINavigationController).topViewController as EditViewController
                 controller.editItem = object
-                controller.newContact = true
+                controller.contactIndex = -2
                 controller.navigationItem.leftBarButtonItem = self.splitViewController?.displayModeButtonItem()
                 controller.navigationItem.leftItemsSupplementBackButton = true
             }
@@ -103,6 +82,8 @@ class MasterViewController: UITableViewController {
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as UITableViewCell
 
+        //self.tableView.reloadData()
+        contacts = ContactsRepository.sharedInstance.GetContacts()
         let object = contacts[indexPath.row] as Contact
         cell.textLabel!.text = object.name
         // Hack to avoid making a custon cell
@@ -117,6 +98,8 @@ class MasterViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
         if editingStyle == .Delete {
+            ContactsRepository.sharedInstance.DeleteContact(indexPath.row)
+            //self.tableView.reloadData()
             contacts.removeAtIndex(indexPath.row)
             tableView.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Fade)
         } else if editingStyle == .Insert {
