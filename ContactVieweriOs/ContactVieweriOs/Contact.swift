@@ -14,6 +14,7 @@ class Contact: NSObject {
     var title:String
     var email:String
     var twitterId:String
+    var cId:String = ""
     var mId:Int = -1
     
     init(name:String, phone:String, title:String, email:String, twitterId:String) {
@@ -22,6 +23,14 @@ class Contact: NSObject {
         self.title = title
         self.email = email
         self.twitterId = twitterId
+    }
+    init(name:String, phone:String, title:String, email:String, twitterId:String, cId:String) {
+        self.name = name
+        self.phone = phone
+        self.title = title
+        self.email = email
+        self.twitterId = twitterId
+        self.cId = cId
     }
     
     func setMyIndex(index:Int)

@@ -33,6 +33,14 @@ class ContactsRepository : NSObject
         contacts.append(Contact(name: "b", phone: "456", title: "dudette", email: "b@b.com", twitterId: "bgirl"))
         contacts.append(Contact(name: "c", phone: "789", title: "dudelet", email: "c@c.com", twitterId: "ckid"))
     }
+
+    func loadInstance(iContacts: NSDictionary) {
+        let cArray: [NSDictionary] = iContacts["contacts"] as [NSDictionary]
+        contacts.removeAll(keepCapacity: false)
+        for cInfo in cArray {
+            contacts.append(Contact(name: cInfo["name"] as String, phone: cInfo["phone"] as String, title: cInfo["title"] as String, email: cInfo["email"] as String, twitterId: cInfo["twitterId"] as String, cId: cInfo["_id"] as String))
+        }
+    }
     
     func GetContacts() -> [Contact] {
         // Update from repository first
