@@ -24,6 +24,8 @@ class MasterViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.getAllContacts()
+        
         // Do any additional setup after loading the view, typically from a nib.
         self.navigationItem.leftBarButtonItem = self.editButtonItem()
 
@@ -105,6 +107,30 @@ class MasterViewController: UITableViewController {
         } else if editingStyle == .Insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view.
         }
+    }
+    
+    func getAllContacts() -> Void {
+        let url = NSURL(string:"http://contacts.tinyapollo.com/contacts?key=grumpy")!
+        var request = NSMutableURLRequest(URL: url)
+        request.HTTPMethod = "GET"
+        let session = NSURLSession.sharedSession()
+        let task = session.dataTaskWithRequest(request, completionHandler:{data, response, error ->
+            Void in
+            // deserialize the response
+            var err: NSError?
+            let responseDict = NSJSONSerialization.JSONObjectWithData(data, options:.MutableLeaves,
+                error:&err) as NSDictionary
+            
+            ContactsRepository.sharedInstance.loadInstance(responseDict)
+            
+            
+            NSOperationQueue.mainQueue().addOperationWithBlock {
+                // refresh UI in main thread
+                self.tableView.reloadData()
+            }
+            
+        })
+        task.resume()
     }
 }
 
